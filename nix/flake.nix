@@ -42,12 +42,15 @@
           pkgs.neovim
 	  pkgs.tmux
 	  pkgs.alacritty
+          pkgs.xcode-select
         ];
+
+      xcode.cli-tools = true;
 
       homebrew = {
         enable = true;
 	brews = [
-	  "mas"
+	  # "mas"
 	];
 	casks = [
 	  "firefox"
@@ -135,7 +138,7 @@
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Jadens-MacBook-Air
-    darwinConfigurations."Jadens-MacBook-Air" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations.air = nix-darwin.lib.darwinSystem {
       modules =
         [ 
 	  configuration 
