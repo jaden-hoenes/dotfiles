@@ -1,0 +1,229 @@
+{
+  description = "i'm a little teapot short and stout";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    mac-app-util.url = "github:hraban/mac-app-util";
+  };
+
+  outputs = { 
+    self, 
+    nixpkgs,
+    nix-darwin, 
+    nix-homebrew, 
+    home-manager, 
+    mac-app-util, 
+    ... 
+  } @ inputs: let
+  buildConfiguration = { nix, services, nixpkgs, pkgs, ... }: {
+    nix.settings.experimental-features = "nix-command flakes";
+    nix.optimise.automatic = true;
+
+    services.nix-daemon.enable = true;
+
+    nixpkgs.hostPlatform = "aarch64-darwin";
+    # nixpkgs.config.allowUnfree = true;
+  };
+
+  darwinSystemConfiguration = { system, ... }: {
+    # Set Git commit hash for darwin-version.
+    system.configurationRevision = self.rev or self.dirtyRev or null;
+    
+    # Used for backwards compatibility, please read the changelog before changing.
+    # $ darwin-rebuild changelog
+    system.stateVersion = 5;
+    
+    # Check if XCode CLI tools are installed
+    system.activationScripts.xcode.text = ''
+      if ! [ -f "/Library/Developer/CommandLineTools" ]; then
+        echo "Installing XCode Command Line Tools..."
+        xcode-select --install || true
+      fi
+    '';
+
+    # Add Rosetta installation check
+    system.activationScripts.rosetta.text = ''
+      if ! pkgutil --pkg-info com.apple.pkg.RosettaUpdateAuto > /dev/null 2>&1; then
+        echo "Installing Rosetta 2..."
+        softwareupdate --install-rosetta --agree-to-license || true
+      fi
+    '';
+  };
+
+  darwinPreferencesConfiguration = ({ pkgs, ... } @ args: {
+    system.startup.chime = false;
+    security.pam.enableSudoTouchIdAuth = true;
+  
+    system.defaults = {
+      NSGlobalDomain = {
+        AppleICUForce24HourTime = true;
+  
+        AppleInterfaceStyle = "Dark";
+  
+        KeyRepeat = 2;
+        NSAutomaticDashSubstitutionEnabled = false;
+        NSAutomaticPeriodSubstitutionEnabled = false;
+        NSAutomaticQuoteSubstitutionEnabled = false;
+        NSAutomaticCapitalizationEnabled = false;
+  
+        "com.apple.swipescrolldirection" = false; # Disable "natural" scrolling
+  
+        AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
+        # _HIHideMenuBar = true;
+      };
+  
+      controlcenter.BatteryShowPercentage = true;
+  
+      # universalaccess.mouseDriverCursorSize = 2.0;
+  
+      loginwindow.GuestEnabled = false;
+  
+      dock.autohide = true;
+      dock.show-recents = false;
+      dock.show-process-indicators = false;
+      #dock.persistent-apps = [
+      #  "${pkgs.alacritty}/Applications/Alacritty.app"
+      #  "${pkgs.firefox}/Applications/Firefox.app"
+      #  "/System/Applications/Messages.app"
+      #  "/System/Applications/iPhone\ Mirroring.app"
+      #];
+  
+      finder.AppleShowAllExtensions = true;
+      finder.AppleShowAllFiles = true;
+      finder.ShowPathbar = true;
+      finder.ShowStatusBar = true;
+      finder.FXPreferredViewStyle = "clmv";
+  
+      # LaunchServices.LSQuarantine = false; # Disable quarantine of downloaded apps
+      CustomSystemPreferences = {
+        NSGlobalDomain = {
+          AppleScrollerPagingBehavior = true;
+          AppleWindowTabbingMode = "always";
+        };
+        
+        "com.apple.finder" = {
+          ShowHardDrivesOnDesktop = false;
+          ShowRemovableMediaOnDesktop = false;
+          ShowExternalHardDrivesOnDesktop = false;
+          ShowMountedServersOnDesktop = false;
+  
+          _FXSortFoldersFirst = true;
+  
+          # New window use $HOME path
+          NewWindowTarget = "PfHm";
+          NewWindowTargetPath = "file://$HOME/";
+  
+          QLEnableTextSelection = true;
+        };
+        "com.apple.desktopservices" = {
+          DSDontWriteUSBStores = true;
+          DSDontWriteNetworkStores = true;
+        };
+        "com.apple.commerce".AutoUpdate = false;
+        "com.apple.SoftwareUpdate" = {
+          AutomaticCheckEnabled = true;
+          ScheduleFrequency = 1;
+  	  AutomaticDownload = 1;
+  	  CriticalUpdateInstall = 1;
+        };
+        "com.apple.print.PrintingPrefs"."Quit When Finished" = true;
+        "com.apple.CrashReporter".DialogType = "none";
+        "com.apple.AdLib" = {
+          forceLimitAdTracking = true;
+          allowApplePersonalizedAdvertising = false;
+  	  allowIdentifierForAdvertising = false;
+        };
+        "com.apple.Safari" = {
+          UniversalSearchEnabled = false;
+  	  SuppressSearchSuggestions = true;
+  	  SendDoNotTrackHTTPHeader = true;
+  
+  	  AutoOpenSafeDownloads = false;
+  
+  	  IncludeDevelopMenu = true;
+  	  IncludeInternalDebugMenu = true;
+  	  WebKitDeveloperExtras = true;
+  	  WebKitDeveloperExtrasEnabledPreferenceKey = true;
+  	  "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" = true;
+        };
+      };
+    };
+  });
+
+  homeManagerConfiguration = ({ pkgs, home-manager, users, nix, ... } @ args: {
+    home-manager.useGlobalPkgs = true;
+    home-manager.useUserPackages = true;
+
+    home-manager.users.jh = import (self + "/jh.nix"); 
+    users.users.jh.home = "/Users/jh";
+
+    nix.settings.trusted-users = [ "jh" ];
+  });
+
+  in
+  {
+    # Build darwin flake using:
+    # $ darwin-rebuild build --flake .#air
+    darwinConfigurations = {
+      air = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+
+	modules = [
+	  buildConfiguration
+	  darwinSystemConfiguration
+	  darwinPreferencesConfiguration
+	  home-manager.darwinModules.home-manager
+	  homeManagerConfiguration
+	  nix-homebrew.darwinModules.nix-homebrew
+          {
+            nix-homebrew = {
+              enable = true;
+              enableRosetta = true;
+
+              user = "jh";
+
+              # todo
+              # mutableTaps = false;
+            };
+
+            homebrew = {
+              enable = true;
+
+              caskArgs.appdir = "/Applications";
+              # caskArgs.no_quarantine = true;
+
+              onActivation = {
+                autoUpdate = true;
+                upgrade = true;
+                cleanup = "zap";
+              };
+          
+              # taps = {};
+              brews = [ "mas" ];
+              casks = [ "firefox" ];
+              # masApps = {};
+            };
+          }
+	  mac-app-util.darwinModules.default
+	];
+      };
+    };
+  };
+}
