@@ -115,16 +115,22 @@
       programs.home-manager.enable = true;
       programs.git = {
         enable = true;
+	delta.enable = true;
+
 	userName = "Jaden Hoenes";
 	userEmail = "jaden.hoenes@gmail.com";
+	signing = {
+	  key = "~/.ssh/id_ed25519";
+	  signByDefault = true;
+	};
+
 	ignores = [ ".DS_Store" ];
 	extraConfig = {
 	  init.defaultBranch = "main";
 	  push.autoSetupRemote = true;
+	  gpg.format = "ssh";
 	};
       };
-
-      home.packages = with pkgs; [];
 
       home.sessionVariables = {
         EDITOR = "vim";
