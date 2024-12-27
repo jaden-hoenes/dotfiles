@@ -61,15 +61,6 @@
 	onActivation.upgrade = true;
       };
 
-      # Ensure Xcode CLI tools are installed
-      system.activationScripts.xcode.text = ''
-        # Check if Xcode CLI tools are installed
-        if ! [ -f "/Library/Developer/CommandLineTools" ]; then
-          echo "Installing Xcode Command Line Tools..."
-          xcode-select --install || true
-        fi
-      '';
-
       fonts.packages =
         [
 	  pkgs.nerd-fonts.jetbrains-mono
