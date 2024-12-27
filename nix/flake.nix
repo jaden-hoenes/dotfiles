@@ -42,10 +42,8 @@
           pkgs.neovim
 	  pkgs.tmux
 	  pkgs.alacritty
-          pkgs.xcode-select
+          pkgs.xcbuild
         ];
-
-      xcode.cli-tools = true;
 
       homebrew = {
         enable = true;
