@@ -28,3 +28,10 @@ fi
 
 echo "Setting up darwin configuration"
 nix run nix-darwin --extra-experimental-features 'nix-command flakes' -- switch --flake ~/.dotfiles/nix#air
+
+echo "Generating ssh key"
+ssh-keygen -q -t ed25519 -C "jaden.hoenes@gmail.com" -N '' <<< $'\ny'
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+echo "Copying ssh key to clipboard"
+pbcopy < ~/.ssh/id_ed25519
+
