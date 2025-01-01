@@ -15,10 +15,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    #ghostty = {
+    #  url = "github:ghostty-org/ghostty";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     mac-app-util.url = "github:hraban/mac-app-util";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager, mac-app-util }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager, mac-app-util, /* ghostty */}:
   let
     configuration = { pkgs, ... }: {
       # Necessary for using flakes on this system.
@@ -41,7 +45,11 @@
         [ 
           pkgs.neovim
 	  pkgs.tmux
-	  pkgs.alacritty
+	  pkgs.fzf
+	  pkgs.zoxide
+	  pkgs.oh-my-posh
+	  #pkgs.alacritty
+	  #ghostty.packages.aarch64-darwin.default
         ];
 
       homebrew = {
@@ -51,6 +59,7 @@
 	];
 	casks = [
 	  "firefox"
+	  "ghostty"
 	];
 	masApps = {
 	  # "Yoink" = 123;
@@ -118,17 +127,10 @@
 	  gpg.format = "ssh";
 	};
       };
-      programs.zsh = {
-        enable = true;
-	sessionVariables = {
-	  EDITOR = "nvim";
-	};
-	shellAliases = {
-	  ll = "ls -lath";
-	};
-      };
+      programs.zsh.enable = true;
 
       home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/zsh/.zshrc";
+      home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/ohmyposh";
     };
   in
   {
