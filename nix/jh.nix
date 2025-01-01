@@ -7,14 +7,6 @@
       pkgs.tmux
       pkgs.alacritty
     ];
-
-    #file = {
-    #  ".zshenv".text = ''
-    #    source ${config.system.build.setEnvironment}
-    #    source $HOME/.config/zsh/.zshenv
-    #  '';
-    #  ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "$HOME/.dotfiles/zsh/.zshrc";
-    #};
   };
 
   programs = {

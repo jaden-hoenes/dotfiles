@@ -42,7 +42,6 @@
           pkgs.neovim
 	  pkgs.tmux
 	  pkgs.alacritty
-          pkgs.xcbuild
         ];
 
       homebrew = {
@@ -65,9 +64,6 @@
         [
 	  pkgs.nerd-fonts.jetbrains-mono
 	];
-
-      # Enable alternative shell support in nix-darwin.
-      programs.zsh.enable = true;
 
       system.defaults = {
 	NSGlobalDomain.AppleICUForce24HourTime = true;
@@ -100,7 +96,7 @@
 	home = "/Users/jh";
       };
     };
-    homeconfig = {pkgs, ...}: {
+    homeconfig = {pkgs, config, ...}: {
       home.stateVersion = "23.05";
 
       programs.home-manager.enable = true;
@@ -122,12 +118,17 @@
 	  gpg.format = "ssh";
 	};
       };
-
-      home.sessionVariables = {
-        EDITOR = "vim";
+      programs.zsh = {
+        enable = true;
+	sessionVariables = {
+	  EDITOR = "nvim";
+	};
+	shellAliases = {
+	  ll = "ls -lath";
+	};
       };
 
-      # home.file.".vimrc".source = ./vimconfig;
+      home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/zsh/.zshrc";
     };
   in
   {
