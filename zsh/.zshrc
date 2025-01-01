@@ -51,9 +51,11 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 setopt globdots
 
-alias ls='ls --color'
-alias ll='ls -lath --color'
+alias ls='ls -aF --color'
+alias l='ls -lAthF --color'
+alias ll='ls -lAthF --color'
 alias c='clear'
+alias cc='clear'
 alias vim='nvim'
 alias vi='vim'
 
