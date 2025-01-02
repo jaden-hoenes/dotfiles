@@ -74,31 +74,115 @@
 	  pkgs.nerd-fonts.jetbrains-mono
 	];
 
+      system.startup.chime = false;
+      security.pam.enableSudoTouchIdAuth = true;
+
       system.defaults = {
-	NSGlobalDomain.AppleICUForce24HourTime = true;
-	NSGlobalDomain.AppleInterfaceStyle = "Dark";
-	NSGlobalDomain.KeyRepeat = 2;
-	NSGlobalDomain.AppleShowAllExtensions = true;
-	NSGlobalDomain.AppleShowAllFiles = true;
+        NSGlobalDomain = {
+          AppleICUForce24HourTime = true;
+
+          AppleInterfaceStyle = "Dark";
+
+          KeyRepeat = 2;
+	  NSAutomaticDashSubstitutionEnabled = false;
+	  NSAutomaticPeriodSubstitutionEnabled = false;
+	  NSAutomaticQuoteSubstitutionEnabled = false;
+	  NSAutomaticCapitalizationEnabled = false;
+
+	  "com.apple.swipescrolldirection" = false; # Disable "natural" scrolling
+
+          AppleShowAllExtensions = true;
+          AppleShowAllFiles = true;
+	  # _HIHideMenuBar = true;
+	};
+
 	controlcenter.BatteryShowPercentage = true;
-        dock.autohide = true;
-	dock.persistent-apps =
-	  [
+
+	loginwindow.GuestEnabled = false;
+
+        dock = {
+	  autohide = true;
+	  persistent-apps = [
 	    "${pkgs.alacritty}/Applications/Alacritty.app"
 	    "/Applications/Firefox.app"
 	    "/System/Applications/Messages.app"
 	    "/System/Applications/iPhone\ Mirroring.app"
 	  ];
-	dock.show-recents = false;
-	finder.AppleShowAllExtensions = true;
-	finder.AppleShowAllFiles = true;
-	finder.FXPreferredViewStyle = "clmv";
-	finder.ShowPathbar = true;
-	finder.ShowStatusBar = true;
-	loginwindow.GuestEnabled = false;
+          show-recents = false;
+	  show-process-indicators = false;
+	};
+
+	finder = {
+	  AppleShowAllExtensions = true;
+	  AppleShowAllFiles = true;
+
+	  ShowPathbar = true;
+	  ShowStatusBar = true;
+
+	  FXEnableExtensionChangeWarning = true;
+	  FXPreferredViewStyle = "clmv";
+	};
+
+	CustomSystemPreferences = {
+	  NSGlobalDomain = {
+	    AppleScrollerPagingBehavior = true;
+	    AppleWindowTabbingMode = "always";
+	  };
+
+	  "com.apple.finder" = {
+	    ShowHardDrivesOnDesktop = false;
+	    ShowRemoveableMediaOnDesktop = false;
+	    ShowExternalHardDrivesOnDesktop = false;
+	    ShowMountedServersOnDesktop = false;
+
+	    _FXSortFoldersFirst = true;
+	    _FXShowPosixPathInTitle = true;
+
+	    NewWindowTarget = "PfHm";
+	    NewWindowTargetPath = "file://$HOME/";
+
+	    QLEnableTextSelection = true;
+	  };
+
+	  "com.apple.desktopservices" = {
+	    DSDontWriteUSBStores = true;
+	    DSDontWriteNetworkStores = true;
+	  };
+
+	  "com.apple.commerce".AutoUpdate = false;
+
+	  "com.apple.SoftwareUpdate" = {
+	    AutomaticCheckEnabled = true;
+	    ScheduleFrequency = 1;
+	    AutomaticDownload = 1;
+	    CriticalUpdateInstall = 1;
+	  };
+
+	  "com.apple.print.PrintingPrefs"."Quit When Finished" = true;
+
+	  "com.apple.CrashReporter".DialogType = "none";
+
+	  "com.apple.AdLib" = {
+	    forceLimitAdTracking = true;
+	    allowApplePersonalizedAdvertising = false;
+	    allowIdentifierForAdvertising = false;
+	  };
+
+	  "com.apple.Safari" = {
+	    UniversalSearchEnabled = false;
+	    SuppressSearchSuggestions = true;
+	    SendDoNotTrackHTTPHeader = true;
+
+	    AutoOpenSafeDownloads = false;
+
+	    IncludeDevelopMenu = true;
+	    IncludeInternalDebugMenu = true;
+	    WebKitDeveloperExtras = true;
+	    WebKitDeveloperExtrasEnabledPreferenceKey = true;
+	    "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" = true;
+	};
       };
-      system.startup.chime = false;
-      security.pam.enableSudoTouchIdAuth = true;
+    };
 
       users.users.jh = {
         name = "jh";
@@ -129,8 +213,8 @@
       };
       programs.zsh.enable = true;
 
-      home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/zsh/.zshrc";
-      home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/ohmyposh";
+      home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/zsh/.zshrc";
+      home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ohmyposh";
     };
   in
   {
