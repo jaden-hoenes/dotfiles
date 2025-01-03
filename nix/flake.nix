@@ -3,26 +3,62 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nix-homebrew = {
       url = "github:zhaofengli-wip/nix-homebrew";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    homebrew-bundle = {
+      url = "github:homebrew/homebrew-bundle";
+      flake = false;
+    };
+    nikitabobko = {
+      url = "github:nikitabobko/homebrew-tap";
+      flake = false;
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     #ghostty = {
     #  url = "github:ghostty-org/ghostty";
     #  inputs.nixpkgs.follows = "nixpkgs";
     #};
+
     mac-app-util.url = "github:hraban/mac-app-util";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, home-manager, mac-app-util, /* ghostty */}:
+  outputs = inputs @ {
+    self, 
+    nixpkgs, 
+
+    nix-darwin, 
+
+    nix-homebrew, 
+    homebrew-core,
+    homebrew-cask,
+    homebrew-bundle,
+    nikitabobko,
+
+    home-manager, 
+    mac-app-util, 
+    /* ghostty */
+  }:
   let
     configuration = { pkgs, ... }: {
       # Necessary for using flakes on this system.
@@ -60,6 +96,7 @@
 	casks = [
 	  "firefox"
 	  "ghostty"
+	  "nikitabobko/tap/aerospace"
 	];
 	masApps = {
 	  # "Yoink" = 123;
@@ -103,7 +140,7 @@
         dock = {
 	  autohide = true;
 	  persistent-apps = [
-	    "${pkgs.alacritty}/Applications/Alacritty.app"
+	    "/Applications/Ghostty.app"
 	    "/Applications/Firefox.app"
 	    "/System/Applications/Messages.app"
 	    "/System/Applications/iPhone\ Mirroring.app"
@@ -215,29 +252,41 @@
 
       home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/zsh/.zshrc";
       home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ohmyposh";
+      home.file.".config/aerospace".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/aerospace";
     };
   in
   {
     # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#Jadens-MacBook-Air
+    # $ darwin-rebuild build --flake .#air
     darwinConfigurations.air = nix-darwin.lib.darwinSystem {
       modules =
         [ 
 	  configuration 
+
 	  nix-homebrew.darwinModules.nix-homebrew
 	  {
 	    nix-homebrew = {
 	      enable = true;
 	      enableRosetta = true;
 	      user = "jh";
+
+	      mutableTaps = false;
+	      taps = {
+	        "homebrew/core" = homebrew-core;
+		"homebrew/cask" = homebrew-cask;
+		"homebrew/bundle" = homebrew-bundle;
+		"nikitabobko/tap" = nikitabobko;
+	      };
 	    };
 	  }
+
 	  home-manager.darwinModules.home-manager {
 	    home-manager.useGlobalPkgs = true;
 	    home-manager.useUserPackages = true;
 	    home-manager.verbose = true;
 	    home-manager.users.jh = homeconfig;
 	  }
+
 	  mac-app-util.darwinModules.default
 	];
     };
