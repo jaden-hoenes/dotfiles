@@ -54,15 +54,14 @@
 
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
-      environment.systemPackages =
-        [ 
-          pkgs.neovim
-	  pkgs.tmux
-	  pkgs.fzf
-	  pkgs.zoxide
-	  pkgs.oh-my-posh
-	  #ghostty.packages.aarch64-darwin.default
-        ];
+      environment.systemPackages = [ 
+        pkgs.neovim
+        pkgs.tmux
+        pkgs.fzf
+        pkgs.zoxide
+        pkgs.oh-my-posh
+        #ghostty.packages.aarch64-darwin.default
+      ];
 
       homebrew = {
         enable = true;
@@ -88,11 +87,10 @@
 	onActivation.upgrade = true;
       };
 
-      fonts.packages =
-        [
-	  pkgs.nerd-fonts.jetbrains-mono
-	  pkgs.nerd-fonts.hack
-	];
+      fonts.packages = [
+	pkgs.nerd-fonts.jetbrains-mono
+	pkgs.nerd-fonts.hack
+      ];
 
       system.startup.chime = false;
       security.pam.enableSudoTouchIdAuth = true;
@@ -209,10 +207,10 @@
 	home = "/Users/jh";
       };
     };
-    homeconfig = {pkgs, config, ...}: {
+    homeconfig = { pkgs, config, ... }: {
       home.stateVersion = "23.05";
-
       programs.home-manager.enable = true;
+
       programs.git = {
         enable = true;
 	delta.enable = true;
@@ -231,12 +229,32 @@
 	  gpg.format = "ssh";
 	};
       };
+
       programs.zsh.enable = true;
+
+      #programs.tmux = {
+      #  enable = true;
+      #  sensibleOnTop = false;
+      #  extraConfig = ''
+      #    ${builtins.readFile "${config.home.homeDirectory}/dotfiles/tmux/tmux.conf"}
+      #  '';
+      #};
 
       home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/zsh/.zshrc";
       home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ohmyposh";
       home.file.".config/aerospace".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/aerospace";
       home.file.".config/sketchybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/sketchybar";
+      home.file.".config/tmux".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/tmux";
+      home.file."tpm" = {
+        source = pkgs.fetchFromGitHub {
+          owner = "tmux-plugins";
+          repo = "tpm";
+          rev = "master";
+          hash = "sha256-hW8mfwB8F9ZkTQ72WQp/1fy8KL1IIYMZBtZYIwZdMQc=";
+        };
+        target = ".tmux/plugins/tpm";
+      };
+
     };
   in
   {
