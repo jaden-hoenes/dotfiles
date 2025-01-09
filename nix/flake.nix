@@ -13,22 +13,6 @@
       url = "github:zhaofengli-wip/nix-homebrew";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    homebrew-core = {
-      url = "github:homebrew/homebrew-core";
-      flake = false;
-    };
-    homebrew-cask = {
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
-    homebrew-bundle = {
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
-    };
-    nikitabobko = {
-      url = "github:nikitabobko/homebrew-tap";
-      flake = false;
-    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -46,18 +30,11 @@
   outputs = inputs @ {
     self, 
     nixpkgs, 
-
     nix-darwin, 
-
     nix-homebrew, 
-    homebrew-core,
-    homebrew-cask,
-    homebrew-bundle,
-    nikitabobko,
-
     home-manager, 
     mac-app-util, 
-    /* ghostty */
+    /* ghostty, */
   }:
   let
     configuration = { pkgs, ... }: {
@@ -84,19 +61,24 @@
 	  pkgs.fzf
 	  pkgs.zoxide
 	  pkgs.oh-my-posh
-	  #pkgs.alacritty
 	  #ghostty.packages.aarch64-darwin.default
         ];
 
       homebrew = {
         enable = true;
+	taps = [
+	  "nikitabobko/tap"
+	  "FelixKratz/formulae"
+	];
 	brews = [
 	  # "mas"
+	  "sketchybar"
+	  "borders"
 	];
 	casks = [
 	  "firefox"
 	  "ghostty"
-	  "nikitabobko/tap/aerospace"
+	  "aerospace"
 	];
 	masApps = {
 	  # "Yoink" = 123;
@@ -109,6 +91,7 @@
       fonts.packages =
         [
 	  pkgs.nerd-fonts.jetbrains-mono
+	  pkgs.nerd-fonts.hack
 	];
 
       system.startup.chime = false;
@@ -130,7 +113,7 @@
 
           AppleShowAllExtensions = true;
           AppleShowAllFiles = true;
-	  # _HIHideMenuBar = true;
+	  #_HIHideMenuBar = true;
 	};
 
 	controlcenter.BatteryShowPercentage = true;
@@ -253,6 +236,7 @@
       home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/zsh/.zshrc";
       home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ohmyposh";
       home.file.".config/aerospace".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/aerospace";
+      home.file.".config/sketchybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/sketchybar";
     };
   in
   {
@@ -270,13 +254,13 @@
 	      enableRosetta = true;
 	      user = "jh";
 
-	      mutableTaps = false;
-	      taps = {
-	        "homebrew/core" = homebrew-core;
-		"homebrew/cask" = homebrew-cask;
-		"homebrew/bundle" = homebrew-bundle;
-		"nikitabobko/tap" = nikitabobko;
-	      };
+	      #mutableTaps = false;
+	      #taps = {
+	      #  "homebrew/core" = homebrew-core;
+	      #  "homebrew/cask" = homebrew-cask;
+	      #  "homebrew/bundle" = homebrew-bundle;
+	      #  "nikitabobko/tap" = nikitabobko;
+	      #};
 	    };
 	  }
 
