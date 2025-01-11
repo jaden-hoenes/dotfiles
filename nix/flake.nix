@@ -111,7 +111,7 @@
 
           AppleShowAllExtensions = true;
           AppleShowAllFiles = true;
-	  #_HIHideMenuBar = true;
+	  _HIHideMenuBar = false;
 	};
 
 	controlcenter.BatteryShowPercentage = true;
