@@ -89,7 +89,6 @@
 
       fonts.packages = [
 	pkgs.nerd-fonts.jetbrains-mono
-	pkgs.nerd-fonts.hack
       ];
 
       system.startup.chime = false;
@@ -244,6 +243,7 @@
       home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ohmyposh";
       home.file.".config/aerospace".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/aerospace";
       home.file.".config/sketchybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/sketchybar";
+      home.file.".config/ghostty".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ghostty";
       home.file.".config/tmux".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/tmux";
       home.file."tpm" = {
         source = pkgs.fetchFromGitHub {
