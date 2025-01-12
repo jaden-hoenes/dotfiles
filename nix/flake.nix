@@ -107,6 +107,8 @@
 	  NSAutomaticQuoteSubstitutionEnabled = false;
 	  NSAutomaticCapitalizationEnabled = false;
 
+	  NSWindowShouldDragOnGesture = true;
+
 	  "com.apple.swipescrolldirection" = false; # Disable "natural" scrolling
 
           AppleShowAllExtensions = true;
