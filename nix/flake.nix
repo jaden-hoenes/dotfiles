@@ -116,6 +116,8 @@
 	  _HIHideMenuBar = false;
 	};
 
+	screencapture.location = "/Users/jh/Documents";
+
 	controlcenter.BatteryShowPercentage = true;
 
 	loginwindow.GuestEnabled = false;
@@ -233,14 +235,6 @@
       };
 
       programs.zsh.enable = true;
-
-      #programs.tmux = {
-      #  enable = true;
-      #  sensibleOnTop = false;
-      #  extraConfig = ''
-      #    ${builtins.readFile "${config.home.homeDirectory}/dotfiles/tmux/tmux.conf"}
-      #  '';
-      #};
 
       home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/zsh/.zshrc";
       home.file.".config/ohmyposh".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ohmyposh";
