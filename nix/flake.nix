@@ -60,6 +60,7 @@
         pkgs.fzf
         pkgs.zoxide
         pkgs.oh-my-posh
+	pkgs.ripgrep
         #ghostty.packages.aarch64-darwin.default
       ];
 
@@ -244,6 +245,7 @@
       home.file.".config/aerospace".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/aerospace";
       home.file.".config/sketchybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/sketchybar";
       home.file.".config/ghostty".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/ghostty";
+      home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/nvim";
       home.file.".config/tmux".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/tmux";
       home.file."tpm" = {
         source = pkgs.fetchFromGitHub {
