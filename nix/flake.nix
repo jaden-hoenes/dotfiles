@@ -79,6 +79,7 @@
 	  "firefox"
 	  "ghostty"
 	  "aerospace"
+	  "spotify"
 	];
 	masApps = {
 	  # "Yoink" = 123;
