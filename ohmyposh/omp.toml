@@ -11,17 +11,12 @@ final_space = true
 [[blocks]]
   type = 'prompt'
   alignment = 'left'
+  newline = true
 
   [[blocks.segments]]
     template = '{{.Icon}} '
     foreground = 'p:os'
     type = 'os'
-    style = 'plain'
-
-  [[blocks.segments]]
-    template = '{{ .UserName }}@{{ .HostName }} '
-    foreground = 'p:blue'
-    type = 'session'
     style = 'plain'
 
   [[blocks.segments]]
@@ -53,8 +48,24 @@ final_space = true
       revert_icon = ' '
       tag_icon = ' '
 
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
   [[blocks.segments]]
-    template = ''
-    foreground = 'p:closer'
     type = 'text'
     style = 'plain'
+    foreground = 'p:lavender'
+    background = 'transparent'
+    template = ''
+
+[transient_prompt]
+  foreground = 'p:lavender'
+  background = 'transparent'
+  template = ''
+
+[secondary_prompt]
+  foreground = 'p:lavender'
+  background = 'transparent'
+  template = ''
