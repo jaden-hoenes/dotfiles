@@ -64,6 +64,7 @@
 	pkgs.php84
 	pkgs.php84Packages.composer
 	pkgs.nodejs_22
+	pkgs.zig
         #ghostty.packages.aarch64-darwin.default
       ];
 
