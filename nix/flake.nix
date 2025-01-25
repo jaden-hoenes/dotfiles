@@ -61,6 +61,9 @@
         pkgs.zoxide
         pkgs.oh-my-posh
 	pkgs.ripgrep
+	pkgs.php84
+	pkgs.php84Packages.composer
+	pkgs.nodejs_22
         #ghostty.packages.aarch64-darwin.default
       ];
 
@@ -145,6 +148,8 @@
 	  FXEnableExtensionChangeWarning = true;
 	  FXPreferredViewStyle = "clmv";
 	};
+
+	universalaccess.mouseDriverCursorSize = 1.75;
 
 	CustomSystemPreferences = {
 	  NSGlobalDomain = {
