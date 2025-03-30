@@ -50,7 +50,7 @@
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
-      # nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.allowUnfree = true;
 
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
@@ -84,6 +84,7 @@
 	  "ghostty"
 	  "aerospace"
 	  "spotify"
+	  "steam"
 	];
 	masApps = {
 	  # "Yoink" = 123;
@@ -98,7 +99,6 @@
       ];
 
       system.startup.chime = false;
-      security.pam.enableSudoTouchIdAuth = true;
 
       system.defaults = {
         NSGlobalDomain = {
