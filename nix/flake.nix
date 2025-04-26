@@ -19,11 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    #ghostty = {
-    #  url = "github:ghostty-org/ghostty";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
-
     mac-app-util.url = "github:hraban/mac-app-util";
   };
 
@@ -34,7 +29,6 @@
     nix-homebrew, 
     home-manager, 
     mac-app-util, 
-    /* ghostty, */
   }:
   let
     configuration = { pkgs, ... }: {
@@ -65,6 +59,7 @@
 	pkgs.php84Packages.composer
 	pkgs.nodejs_22
 	pkgs.zig
+	pkgs.go
         #ghostty.packages.aarch64-darwin.default
       ];
 
@@ -83,8 +78,8 @@
 	  "firefox"
 	  "ghostty"
 	  "aerospace"
-	  "spotify"
 	  "steam"
+	  "windsurf"
 	];
 	masApps = {
 	  # "Yoink" = 123;
@@ -98,6 +93,7 @@
 	pkgs.nerd-fonts.jetbrains-mono
       ];
 
+      services.aerospace.settings.start-at-login = true;
       system.startup.chime = false;
 
       system.defaults = {
@@ -132,6 +128,7 @@
 	  persistent-apps = [
 	    "/Applications/Ghostty.app"
 	    "/Applications/Firefox.app"
+	    "/Applications/Windsurf.app"
 	    "/System/Applications/Messages.app"
 	    "/System/Applications/iPhone\ Mirroring.app"
 	  ];
@@ -148,6 +145,8 @@
 
 	  FXEnableExtensionChangeWarning = true;
 	  FXPreferredViewStyle = "clmv";
+
+	  QuitMenuItem = true;
 	};
 
 	universalaccess.mouseDriverCursorSize = 1.75;
