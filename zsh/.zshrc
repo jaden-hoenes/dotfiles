@@ -59,6 +59,10 @@ alias cc='clear'
 alias vim='nvim'
 alias vi='vim'
 
+if [[ -f ~/.custom.zsh ]]; then
+  source ~/.custom.zsh
+fi
+
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
