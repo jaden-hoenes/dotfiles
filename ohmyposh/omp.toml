@@ -64,6 +64,7 @@ final_space = true
   foreground = 'p:lavender'
   background = 'transparent'
   template = ''
+  newline = false
 
 [secondary_prompt]
   foreground = 'p:lavender'
