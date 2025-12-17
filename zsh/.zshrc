@@ -1,4 +1,6 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -58,6 +60,8 @@ alias c='clear'
 alias cc='clear'
 alias vim='nvim'
 alias vi='vim'
+
+export PATH="$HOME/.local/bin:$PATH"
 
 if [[ -f ~/.custom.zsh ]]; then
   source ~/.custom.zsh
